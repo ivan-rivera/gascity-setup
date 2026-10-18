@@ -23,6 +23,11 @@ api_key = "$GASCITY_OPENROUTER_API_KEY"
 source = "https://github.com/gastownhall/gascity-packs/tree/main/gascity/roles"
 version = "sha:3b3b89f2011e06d84459aa7bea1552382f13930a"
 
+[agent_defaults]
+# City-wide policy: append the owner-conventions prompt fragment to every
+# agent's rendered prompt body (fills blank append_fragments only).
+append_fragments = ["owner-conventions"]
+
 # [mail]
 # retention_ttl controls how long read messages are retained before purge.
 # 0 disables retention; use "168h" for 7 days.

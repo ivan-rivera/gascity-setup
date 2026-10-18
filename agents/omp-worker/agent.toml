@@ -1,2 +1,3 @@
 dir = "omp-setup"
 provider = "omp"
+description = "General implementation worker for the omp-setup rig"
