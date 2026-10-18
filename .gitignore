@@ -10,3 +10,9 @@ hooks/
 .beads-credential-key
 .beads/proxieddb/
 *.gate.lock*
+
+# Runtime state — lives in the city dir (~/Documents/dev/gascity), not this repo
+.claude/
+.config/
+.dolt-backup/
+Library/
