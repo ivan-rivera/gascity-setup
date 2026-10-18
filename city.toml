@@ -1,0 +1,41 @@
+[workspace]
+provider = "omp"
+
+[providers]
+[providers.claude]
+base = "builtin:claude"
+ready_delay_ms = 0
+[providers.omp]
+base = "builtin:omp"
+
+# Dedicated OpenRouter key for GasCity-served agents (codex/opencode harnesses).
+# Renders onto each harness's serving env (e.g. OPENAI_* for codex) when an
+# agent sets `upstream = "openrouter"`. OMP agents are login-based and use
+# OMP's own keys; they do not read this.
+[upstreams.openrouter]
+base_url = "https://openrouter.ai/api/v1"
+api_key = "$GASCITY_OPENROUTER_API_KEY"
+
+[defaults]
+[defaults.rig]
+[defaults.rig.imports]
+[defaults.rig.imports.gc]
+source = "https://github.com/gastownhall/gascity-packs/tree/main/gascity/roles"
+version = "sha:3b3b89f2011e06d84459aa7bea1552382f13930a"
+
+# [mail]
+# retention_ttl controls how long read messages are retained before purge.
+# 0 disables retention; use "168h" for 7 days.
+# "7d" is not a valid Go duration.
+# It also sets how long a read mail bead stays open before the nudge-mail
+# sweep closes it: unset keeps that sweep's own 60m default, while "0"
+# disables the close phase too, leaving read mail beads open.
+# retention_ttl = "0"
+
+[[rigs]]
+name = "omp-setup"
+default_branch = "main"
+[rigs.imports]
+[rigs.imports.gc]
+source = "https://github.com/gastownhall/gascity-packs/tree/main/gascity/roles"
+version = "sha:3b3b89f2011e06d84459aa7bea1552382f13930a"
