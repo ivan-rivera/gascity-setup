@@ -8,13 +8,21 @@ ready_delay_ms = 0
 [providers.omp]
 base = "builtin:omp"
 
-# Dedicated OpenRouter key for GasCity-served agents (codex/opencode harnesses).
-# Renders onto each harness's serving env (e.g. OPENAI_* for codex) when an
-# agent sets `upstream = "openrouter"`. OMP agents are login-based and use
-# OMP's own keys; they do not read this.
+# OMP harness with the model pinned to the oracle role (Opus 5.5 via
+# OpenRouter) — the expensive, most-powerful consultant. `args` replaces the
+# builtin preset's args, so the gc hook args are re-declared here.
+[providers.omp-oracle]
+base = "builtin:omp"
+args = ["--hook", ".omp/hooks/gc-hook.ts", "--model", "openrouter/anthropic/claude-opus-5.5"]
+
+# OpenRouter upstream for GasCity-served harnesses (codex/opencode) — the
+# same OPENROUTER_API_KEY the controller environment already carries (it
+# also feeds the reviewer's `ocr` runs). For a dedicated key: change this
+# ref and export the new var in the supervisor's environment. OMP agents
+# are login-based and use OMP's own keys; they do not read this.
 [upstreams.openrouter]
 base_url = "https://openrouter.ai/api/v1"
-api_key = "$GASCITY_OPENROUTER_API_KEY"
+api_key = "$OPENROUTER_API_KEY"
 
 [defaults]
 [defaults.rig]

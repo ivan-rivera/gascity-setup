@@ -1,0 +1,2 @@
+description = "Oracle: the most powerful model available (Opus 5.5), consulted only when workers are stuck or a decision needs deep reasoning"
+provider = "omp-oracle"

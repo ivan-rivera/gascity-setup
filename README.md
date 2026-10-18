@@ -10,14 +10,14 @@ the city dir and is never committed.
 
 - **City:** `gascity` at `~/Documents/dev/gascity`, supervisor-managed.
 - **Rig:** `omp-setup` → `~/Documents/dev/omp-setup`, imports the 12 `gc.*` role agents (triager, decomposer, workers, reviewers, publisher, run-operator).
-- **Local agents:** `mayor` (always-on coordinator), `omp-worker` (rig worker).
+- **Local agents:** `mayor` (always-on coordinator), `omp-worker` (rig worker), `reviewer` (OCR critic — external review via open-code-review), `oracle` (Opus 5.5, consult-only).
 - **From imports:** the pinned `core` / `bd` / `gc` packs supply pool workers, `bd.dog`, control dispatchers, and the bundled formulas, orders, and housekeeping.
 
 ## Layout
 
 | Path | What it is |
 |---|---|
-| `city.toml` | Deployment layer: providers (`omp`, `claude`), OpenRouter upstream, rig imports, `[agent_defaults]`. |
+| `city.toml` | Deployment layer: providers (`omp`, `claude`, `omp-oracle`), OpenRouter upstream, rig imports, `[agent_defaults]`. |
 | `pack.toml` | City-pack manifest: identity, pinned imports, the always-on `mayor` named session. |
 | `packs.lock` | Resolved import pins. |
 | `agents/<name>/` | Local agents — `agent.toml` + `prompt.template.md`, discovered by convention. |

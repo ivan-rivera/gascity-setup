@@ -1,0 +1,2 @@
+description = "Independent code reviewer running OCR (open-code-review) over diffs — external critic on a different model, not a self-reviewer"
+provider = "omp"

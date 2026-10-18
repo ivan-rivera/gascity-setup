@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
-# Pack doctor check: GASCITY_OPENROUTER_API_KEY, referenced by
-# [upstreams.openrouter] in city.toml, must be present in the environment
-# gc agents run with.
+# Pack doctor check: OPENROUTER_API_KEY must be present in the environment
+# gc runs with. It backs two consumers: the [upstreams.openrouter] block in
+# city.toml (GasCity-served harnesses such as codex/opencode) and the
+# reviewer agent's `ocr` runs (open-code-review, provider openrouter).
 #
 # Exit codes: 0=OK, 1=Warning, 2=Error
 # stdout: first line=message, rest=details
 
-if [ -n "${GASCITY_OPENROUTER_API_KEY:-}" ]; then
-    echo "GASCITY_OPENROUTER_API_KEY is set"
+if [ -n "${OPENROUTER_API_KEY:-}" ]; then
+    echo "OPENROUTER_API_KEY is set"
     exit 0
 fi
 
-echo "GASCITY_OPENROUTER_API_KEY is not set"
+echo "OPENROUTER_API_KEY is not set"
 echo ""
-echo "city.toml [upstreams.openrouter] references \$GASCITY_OPENROUTER_API_KEY."
-echo "Any agent that sets upstream = \"openrouter\" will fail authentication"
-echo "until the key is exported in the environment the controller runs from."
+echo "city.toml [upstreams.openrouter] references \$OPENROUTER_API_KEY, and"
+echo "the reviewer agent's ocr runs authenticate with it too. Export it in"
+echo "the environment the controller runs from — the supervisor's launchd"
+echo "environment, which spawned agent sessions inherit."
 exit 1
