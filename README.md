@@ -12,6 +12,7 @@ the city dir and is never committed.
 - **Rig:** `omp-setup` → `~/Documents/dev/omp-setup`, imports the 12 `gc.*` role agents (triager, decomposer, workers, reviewers, publisher, run-operator).
 - **Local agents:** `mayor` (always-on coordinator), `omp-worker` (rig worker), `reviewer` (OCR critic — external review via open-code-review), `oracle` (Opus 5.5, consult-only).
 - **From imports:** the pinned `core` / `bd` / `gc` packs supply pool workers, `bd.dog`, control dispatchers, and the bundled formulas, orders, and housekeeping.
+- **Keys:** `OPENROUTER_API_KEY` is OMP's own; `GASCITY_OPENROUTER_API_KEY` (in `~/.gc/secrets.env`) is the dedicated GasCity key — the oracle and reviewer bill their spend through it. See city.toml for the one-line city-wide flip.
 
 ## Layout
 

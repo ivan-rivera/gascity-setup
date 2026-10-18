@@ -1,2 +1,7 @@
 description = "Independent code reviewer running OCR (open-code-review) over diffs — external critic on a different model, not a self-reviewer"
 provider = "omp"
+env = { OPENROUTER_API_KEY = "$GASCITY_OPENROUTER_API_KEY" }
+
+# Safety net for hung ocr runs: a session idle longer than this is reaped.
+# The open bead survives — work never dies with the session.
+idle_timeout = "30m"

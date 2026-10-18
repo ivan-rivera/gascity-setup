@@ -1,1 +1,1 @@
-description = "OPENROUTER_API_KEY (upstream + ocr reviewer) is present in the environment"
+description = "GASCITY_OPENROUTER_API_KEY (dedicated GasCity OpenRouter key) is provisioned"

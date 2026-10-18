@@ -15,14 +15,22 @@ base = "builtin:omp"
 base = "builtin:omp"
 args = ["--hook", ".omp/hooks/gc-hook.ts", "--model", "openrouter/anthropic/claude-opus-5.5"]
 
-# OpenRouter upstream for GasCity-served harnesses (codex/opencode) — the
-# same OPENROUTER_API_KEY the controller environment already carries (it
-# also feeds the reviewer's `ocr` runs). For a dedicated key: change this
-# ref and export the new var in the supervisor's environment. OMP agents
-# are login-based and use OMP's own keys; they do not read this.
+# OpenRouter keys are split for cost tracking: OPENROUTER_API_KEY is OMP's
+# own allocation; GASCITY_OPENROUTER_API_KEY is the dedicated GasCity key
+# (value in ~/.gc/secrets.env, persisted into the supervisor env with
+# `GC_SUPERVISOR_ENV=GASCITY_OPENROUTER_API_KEY gc supervisor install
+# --force`). This upstream serves GasCity-run harnesses (codex/opencode).
 [upstreams.openrouter]
 base_url = "https://openrouter.ai/api/v1"
-api_key = "$OPENROUTER_API_KEY"
+api_key = "$GASCITY_OPENROUTER_API_KEY"
+
+# Full cost isolation — bill EVERY managed session's OMP/ocr spend to the
+# GasCity key by overriding OMP's credential city-wide. Uncomment to enable.
+# NOTE: this changes the launch fingerprint of all OMP agent sessions; the
+# controller relaunches them (including the mayor). The per-agent overrides
+# on agents/oracle and agents/reviewer already cover the big spenders.
+# [workspace.env]
+# OPENROUTER_API_KEY = "$GASCITY_OPENROUTER_API_KEY"
 
 [defaults]
 [defaults.rig]

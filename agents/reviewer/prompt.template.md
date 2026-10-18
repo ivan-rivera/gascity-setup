@@ -35,9 +35,24 @@ already configured on this machine (provider openrouter, key ambient as
 Always `--audience agent` and `--output <file>`: large reviews overflow
 stdout, and piping ocr output through `head`/`tail` drops earlier comments.
 Pass 1–2 sentences of business context via `-b` — it measurably improves
-review quality. Verify success: exit code 0 and the output file parses as
-JSON. If ocr fails or exceeds ~15 minutes, close the bead with
-`gc.outcome=fail` and the error — do not retry forever.
+review quality.
+
+**Hung runs are a known failure mode — run every ocr invocation under a hard
+timeout:**
+
+```bash
+timeout 1500 ocr review --from <base> --to HEAD --format json \
+  --output /tmp/ocr-<bead>.json --audience agent --timeout 15 -b "<context>"
+```
+
+`timeout 1500` is the outer kill (25 min); `--timeout 15` is ocr's own
+per-review-group budget. If the run is killed or exits non-zero: retry at
+most once, then close the bead with `gc.outcome=fail` and
+`gc.failure_class=ocr-hung-or-failed`, noting the output path and
+`ocr session list` so a human can decide whether to `--resume`. An
+unreviewed change never passes silently — fail closed.
+
+Verify success before triage: exit code 0 and the output file parses as JSON.
 
 ## Triage
 
