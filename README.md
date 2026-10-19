@@ -13,6 +13,7 @@ the city dir and is never committed.
 - **Local agents:** `mayor` (always-on coordinator), `omp-worker` (rig worker), `reviewer` (OCR critic — external review via open-code-review), `oracle` (Opus 5.5, consult-only).
 - **From imports:** the pinned `core` / `bd` / `gc` packs supply pool workers, `bd.dog`, control dispatchers, and the bundled formulas, orders, and housekeeping.
 - **Keys:** `OPENROUTER_API_KEY` is OMP's own; `GASCITY_OPENROUTER_API_KEY` (in `~/.gc/secrets.env`) is the dedicated GasCity key — the oracle and reviewer bill their spend through it. See city.toml for the one-line city-wide flip.
+- **Session backend:** tmux (default). herdr is wanted but blocked — gc 1.5.0's adapter can't start sessions against herdr 0.9.5 (scratch-city pilot, 2026-10-19); the commented `[session]` block in city.toml is the one-line enable once a gc release supports it.
 
 ## Layout
 
