@@ -2,15 +2,23 @@
 provider = "omp"
 
 # herdr session backend — one workspace per rig + one for the city, one tab
-# per agent (herdr 0.9.5 installed). WANTED but blocked: gc 1.5.0's adapter
-# cannot bring sessions up against herdr 0.9.x ("herdr server for session
-# ... did not become ready" — reproducible on a scratch-city pilot,
-# 2026-10-19; the adapter's validated surface is 0.7–0.8). Uncomment when a
-# gc release supports it. Sessions launched after the switch run under
-# herdr; existing tmux sessions migrate as they restart (`gc restart` cuts
-# over immediately).
-# [session]
-# provider = "herdr"
+# per agent. herdr 0.9.5 works with gc 1.5.0 via a compat symlink: gc's
+# adapter dials the session socket under os.UserConfigDir(), which on macOS
+# is ~/Library/Application Support/herdr/sessions/<city>/.herdr.sock, while
+# herdr 0.9 binds under ~/.config/herdr/sessions/<city>/. The symlink
+# bridges them:
+#
+#   mkdir -p "$HOME/Library/Application Support/herdr/sessions"
+#   ln -sfn "$HOME/.config/herdr/sessions/gascity" \
+#     "$HOME/Library/Application Support/herdr/sessions/gascity"
+#
+# (created on this machine 2026-10-19; scratch-city pilot passed spawn,
+# respawn-after-kill, and tab/workspace creation). Drop the symlink when a
+# gc release resolves herdr's XDG path directly. Sessions launched after a
+# reload run under herdr; existing tmux sessions migrate as they restart
+# (`gc restart` cuts over immediately). tmux remains the fallback backend.
+[session]
+provider = "herdr"
 
 [providers]
 [providers.claude]
