@@ -1,6 +1,8 @@
 [pack]
 name = "gascity"
 schema = 2
+version = "0.1.0"
+description = "Local city pack: owner conventions, city errands, session-crash notification, report command, key checks."
 
 [imports]
 [imports.bd]

@@ -1,0 +1,10 @@
+# session-crash-notify — mail + nudge the mayor the moment an agent session
+# crashes. Crashes are otherwise visible only in `gc status` and the
+# dashboard; this puts them in the coordinator's inbox so an unattended
+# fleet self-reports. Mechanical (event read + mail send), so it runs as an
+# exec order — no LLM, no agent, no wisp.
+[order]
+description = "Mail + nudge the mayor when an agent session crashes"
+trigger = "event"
+on = "session.crashed"
+exec = "$PACK_DIR/assets/scripts/session-crash-notify.sh"

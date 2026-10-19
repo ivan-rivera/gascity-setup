@@ -8,13 +8,29 @@ ready_delay_ms = 0
 [providers.omp]
 base = "builtin:omp"
 
-# Dedicated OpenRouter key for GasCity-served agents (codex/opencode harnesses).
-# Renders onto each harness's serving env (e.g. OPENAI_* for codex) when an
-# agent sets `upstream = "openrouter"`. OMP agents are login-based and use
-# OMP's own keys; they do not read this.
+# OMP harness with the model pinned to the oracle role (Opus 5.5 via
+# OpenRouter) — the expensive, most-powerful consultant. `args` replaces the
+# builtin preset's args, so the gc hook args are re-declared here.
+[providers.omp-oracle]
+base = "builtin:omp"
+args = ["--hook", ".omp/hooks/gc-hook.ts", "--model", "openrouter/anthropic/claude-opus-5.5"]
+
+# OpenRouter keys are split for cost tracking: OPENROUTER_API_KEY is OMP's
+# own allocation; GASCITY_OPENROUTER_API_KEY is the dedicated GasCity key
+# (value in ~/.gc/secrets.env, persisted into the supervisor env with
+# `GC_SUPERVISOR_ENV=GASCITY_OPENROUTER_API_KEY gc supervisor install
+# --force`). This upstream serves GasCity-run harnesses (codex/opencode).
 [upstreams.openrouter]
 base_url = "https://openrouter.ai/api/v1"
 api_key = "$GASCITY_OPENROUTER_API_KEY"
+
+# Full cost isolation — bill EVERY managed session's OMP/ocr spend to the
+# GasCity key by overriding OMP's credential city-wide. Uncomment to enable.
+# NOTE: this changes the launch fingerprint of all OMP agent sessions; the
+# controller relaunches them (including the mayor). The per-agent overrides
+# on agents/oracle and agents/reviewer already cover the big spenders.
+# [workspace.env]
+# OPENROUTER_API_KEY = "$GASCITY_OPENROUTER_API_KEY"
 
 [defaults]
 [defaults.rig]
@@ -22,6 +38,11 @@ api_key = "$GASCITY_OPENROUTER_API_KEY"
 [defaults.rig.imports.gc]
 source = "https://github.com/gastownhall/gascity-packs/tree/main/gascity/roles"
 version = "sha:3b3b89f2011e06d84459aa7bea1552382f13930a"
+
+[agent_defaults]
+# City-wide policy: append the owner-conventions prompt fragment to every
+# agent's rendered prompt body (fills blank append_fragments only).
+append_fragments = ["owner-conventions"]
 
 # [mail]
 # retention_ttl controls how long read messages are retained before purge.

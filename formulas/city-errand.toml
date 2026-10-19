@@ -1,0 +1,47 @@
+# city-errand — small verified task inside the city workspace itself (no rig).
+# Two steps demonstrate the v2 graph shape (needs edge) and encode the
+# owner's verify-before-close convention.
+formula = "city-errand"
+description = "Run a small task inside the city workspace (not a rig): cleanup, docs, config tweaks, reports."
+
+[requires]
+formula_compiler = ">=2.0.0"
+
+[catalog]
+name = "city-errand"
+description = "Small one-off task in the city workspace itself (no rig): cleanup, docs, config, reports. Runs do -> verify on the omp pool."
+
+[vars]
+[vars.task]
+description = "The task, stated concretely enough for a worker to execute without further input."
+required = true
+
+[[steps]]
+id = "do"
+title = "Do: {{task}}"
+type = "task"
+description = """
+Execute this task inside the city workspace: {{task}}.
+
+The city root is available as $GC_CITY. Work only inside it unless the task
+explicitly says otherwise. Keep the change minimal and complete — no
+placeholders, no TODOs, no half-done scope. If the task cannot be completed
+as stated, close this bead with gc.outcome=fail and a concise reason instead
+of improvising a narrower version.
+"""
+metadata = { "gc.run_target" = "omp" }
+
+[[steps]]
+id = "verify"
+title = "Verify: {{task}}"
+needs = ["do"]
+type = "task"
+description = """
+Independently verify the result of the "do" step for: {{task}}.
+
+Do not trust the do-step's claims — run the actual command, test, or program
+that covers the change and observe the result yourself. On success, close
+this bead with gc.outcome=pass and one line of evidence (the command you ran
+and what it printed). On failure, close with gc.outcome=fail and what broke.
+"""
+metadata = { "gc.run_target" = "omp" }

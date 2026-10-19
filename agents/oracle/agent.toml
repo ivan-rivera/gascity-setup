@@ -1,0 +1,7 @@
+description = "Oracle: the most powerful model available (Opus 5.5), consulted only when workers are stuck or a decision needs deep reasoning"
+provider = "omp-oracle"
+
+# Bill this agent's model spend to the dedicated GasCity OpenRouter key
+# (cost isolation from OMP's own OPENROUTER_API_KEY). OMP reads
+# OPENROUTER_API_KEY; the $VAR ref expands from the controller env at launch.
+env = { OPENROUTER_API_KEY = "$GASCITY_OPENROUTER_API_KEY" }
